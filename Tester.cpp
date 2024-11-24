@@ -38,15 +38,15 @@ bool Tester::first() {
     auto gaussAnswer = Gauss(matrix);
     std::cout << "Gauss answer:\n";
     gaussAnswer.printVector();
-
+    std::cout << "\n";
     RationalFunction gauss("Gausian");
 
     gauss.addAnswer(gaussAnswer);
 
     plotter.plotPointsAndFunction(
         initialRecord, std::make_shared<RationalFunction>(gauss), -2, 2, false);
-    std::cout << matrix.determinant() << "\n";
 
+    checkAnswer(matrix, gaussAnswer);
   } catch (const std::exception &e) {
     std::cerr << "Error: " << e.what() << "\n";
     return false;
@@ -82,6 +82,7 @@ bool Tester::second() {
     auto LuAnswer = LUDecomposition(matrix);
     std::cout << "LU answer:\n";
     LuAnswer.printVector();
+    std::cout << "\n";
 
     RationalFunction LUrian("LU");
     LUrian.addAnswer(LuAnswer);
@@ -89,6 +90,7 @@ bool Tester::second() {
     plotter.plotPointsAndFunction(initialRecord,
                                   std::make_shared<RationalFunction>(LUrian),
                                   -2, 2, false);
+    checkAnswer(matrix, LuAnswer);
   } catch (const std::exception &e) {
     std::cerr << "Error: " << e.what() << "\n";
     return false;
@@ -110,7 +112,7 @@ bool Tester::fourth() {
   try {
     Plotter plotter("4");
 
-    size_t dimension = 7;
+    size_t dimension = 10;
 
     RecordMatrix matrix(dimension, dimension + 1, 0);
 
@@ -134,8 +136,11 @@ bool Tester::fourth() {
 
     matrix.printMatrix();
     auto fiveDiagonalAnswer = FiveDiagonalMethod(matrix);
+
     std::cout << "fiveDiagonal answer:\n";
     fiveDiagonalAnswer.printVector();
+    std::cout << "\n";
+
     checkAnswer(matrix, fiveDiagonalAnswer);
   } catch (const std::exception &e) {
     std::cerr << "Error: " << e.what() << "\n";

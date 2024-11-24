@@ -84,16 +84,3 @@ inline RecordVector FiveDiagonalMethod(RecordMatrix &matrix) {
   return answer;
 }
 
-inline void checkAnswer(RecordMatrix &matrix, const RecordVector &answer) {
-  size_t dimension = matrix.data.size();
-  for (size_t i = 0; i < dimension; ++i) {
-    double sum = 0;
-    for (size_t j = 0; j < dimension; ++j) {
-      sum += matrix.getValue(i, j) * answer.getValue(j);
-    }
-    std::cout << "row number = " << i << " direct sum: " << std::fixed
-              << std::setw(10) << std::setprecision(5) << sum
-              << " b: " << std::fixed << std::setw(10) << std::setprecision(5)
-              << matrix.getValue(i, dimension) << std::endl;
-  }
-}
