@@ -7,8 +7,9 @@ int main() {
     size_t n;
     std::cout << "Test N: ";
     std::cin >> n;
-    Tester::makeTest(n);
-    std::cout << "\n\n";
+    if (Tester::makeTest(n)) {
+      std::cout << "\n\n";
+    }
   }
 
   return 0;

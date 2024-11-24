@@ -1,5 +1,6 @@
 #pragma once
 #include "RecordPoints.h"
+#include "IFunction.h"
 inline RecordVector Gauss(RecordMatrix &matrix) {
   size_t dim = matrix.data.size();
   RecordVector result(dim);
