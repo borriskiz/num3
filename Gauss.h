@@ -99,7 +99,21 @@ inline RecordVector LUDecomposition(const RecordMatrix &matrix) {
     }
     result.setValue(i, result.getValue(i) / U.getValue(i, i));
   }
+  RecordMatrix composite(dim, dim, 0);
 
+  for (size_t i = 0; i < dim; i++) {
+    for (size_t j = 0; j < dim; j++) {
+      for (size_t k = 0; k < dim; k++) {
+        double newValue =
+            composite.getValue(i, j) + L.getValue(i, k) * U.getValue(k, j);
+
+        composite.setValue(i, j, newValue);
+      }
+    }
+  }
+
+  std::cout << "L * U matrix:" << std::endl;
+  composite.printMatrix();
   return result;
 }
 

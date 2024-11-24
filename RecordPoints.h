@@ -139,6 +139,7 @@ public:
 };
 
 inline void checkAnswer(RecordMatrix &matrix, const RecordVector &answer) {
+  std::cout << "Checking the answer\n";
   size_t dimension = matrix.data.size();
   for (size_t i = 0; i < dimension; ++i) {
     double sum = 0;

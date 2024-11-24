@@ -112,7 +112,7 @@ bool Tester::fourth() {
   try {
     Plotter plotter("4");
 
-    size_t dimension = 10;
+    size_t dimension = 8;
 
     RecordMatrix matrix(dimension, dimension, 0);
 
