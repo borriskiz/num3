@@ -152,10 +152,9 @@ void Plotter::plotPointsAndFunction(const RecordPoints &points,
   gnuplotScript << "set pointsize 1\n";
   gnuplotScript << "plot";
 
-  gnuplotScript << " '" << plotterName
-                << "_comparison_over.dat' using 1 : 2 with points title '"
-                << points.getName() << "',\ ";
-
+  gnuplotScript << " '" << plotterName << "_points_" << points.getName()
+                << ".dat' using 1 : 2 with points title '" << points.getName()
+                << "',\ ";
 
   std::ofstream dataFile2(plotterName + "_function_" + func.getName() + ".dat");
   if (!dataFile2.is_open()) {

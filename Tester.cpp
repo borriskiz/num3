@@ -13,7 +13,27 @@ const RecordPoints Tester::initialRecord =
 bool Tester::first() {
   try {
     Plotter plotter("1");
-    plotter.plotDeltaPoints({initialRecord}, "test",false);
+    plotter.plotDeltaPoints({initialRecord}, "test", false);
+    size_t dimension = initialRecord.getSize();
+
+    RecordMatrix matrix(dimension, dimension + 1, -1);
+
+    for (int i = 0; i < dimension; ++i) {
+      int p = 2;
+      int q = 3;
+      double x_i = initialRecord.getPoint(i).first;
+      double y_i = initialRecord.getPoint(i).second;
+      for (int j = 0; j < dimension; ++j) {
+        if (j <= p) {
+          matrix.setValue(i, j, std::pow(x_i, j));
+        } else {
+          matrix.setValue(i, j, -y_i * std::pow(x_i, j - p));
+        }
+      }
+      matrix.setValue(i, dimension, y_i);
+    }
+
+    matrix.printMatrix();
   } catch (const std::exception &e) {
     std::cerr << "Error: " << e.what() << "\n";
     return false;

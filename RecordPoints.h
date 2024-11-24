@@ -38,31 +38,33 @@ private:
   std::vector<std::pair<double, double>> points;
   std::string name;
 };
+
 class RecordMatrix {
 public:
   std::vector<std::vector<double>> data;
 
-  RecordMatrix(int rows, int cols, double initialValue = 0.0)
+  RecordMatrix(size_t rows, size_t cols, double initialValue = 0.0)
       : data(rows, std::vector<double>(cols, initialValue)) {}
 
-  void print() const {
+  void printMatrix() const {
     for (const auto &row : data) {
       for (double val : row) {
-        std::cout << std::fixed << std::setprecision(5) << val << "\t";
+        std::cout << std::fixed << std::setw(3) << std::setprecision(5) << val
+                  << ' ';
       }
       std::cout << "\n";
     }
     std::cout << "\n";
   }
 
-  double get(int row, int col) const {
+  double getValue(int row, int col) const {
     if (row < 0 || row >= data.size() || col < 0 || col >= data[0].size()) {
       throw std::out_of_range("Index out of matrix");
     }
     return data[row][col];
   }
 
-  void set(int row, int col, double value) {
+  void setValue(int row, int col, double value) {
     if (row < 0 || row >= data.size() || col < 0 || col >= data[0].size()) {
       throw std::out_of_range("Index out of matrix");
     }
