@@ -45,6 +45,7 @@ bool Tester::first() {
 
     plotter.plotPointsAndFunction(
         initialRecord, std::make_shared<RationalFunction>(gauss), -2, 2, false);
+    std::cout << matrix.determinant() << "\n";
 
   } catch (const std::exception &e) {
     std::cerr << "Error: " << e.what() << "\n";
@@ -107,7 +108,32 @@ bool Tester::third() {
 
 bool Tester::fourth() {
   try {
+    Plotter plotter("4");
 
+    size_t dimension = 7;
+
+    RecordMatrix matrix(dimension, dimension + 1, 0);
+
+    matrix.data.resize(dimension);
+    for (int i = 0; i < dimension; ++i) {
+      matrix.data[i].resize(dimension + 1);
+
+      double sum = 0;
+      for (int j = 0; j < dimension; ++j) {
+        if (std::abs(i - j) <= 2 && i != j) {
+          double value = RandomDouble(5, 10);
+          matrix.setValue(i, j, value);
+          sum += std::abs(value);
+        }
+      }
+
+      matrix.setValue(i, i, 4 * std::pow(-1, RandomInt(0, 1)) * sum);
+
+      matrix.setValue(i, dimension, RandomDouble(-1, 1));
+    }
+
+    matrix.printMatrix();
+    std::cout << matrix.determinant() << "\n";
   } catch (const std::exception &e) {
     std::cerr << "Error: " << e.what() << "\n";
     return false;

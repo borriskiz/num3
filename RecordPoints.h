@@ -5,14 +5,12 @@
 #include <string>
 #include <vector>
 
-inline int randomInt(int min, int max) {
-  int random_num = rand() % (max - min + 1) + min;
-  return random_num;
+inline double RandomDouble(double min, double max) {
+  return min + (max - min) * (rand() / static_cast<double>(RAND_MAX));
 }
 
-inline double randomDouble(double min, double max) {
-  double f = (double)rand() / RAND_MAX;
-  return min + (double)rand() / RAND_MAX * (max - min);
+inline int RandomInt(int min, int max) {
+  return min + rand() % (max - min + 1);
 }
 
 class RecordPoints {
@@ -49,7 +47,7 @@ public:
   void printMatrix() const {
     for (const auto &row : data) {
       for (double val : row) {
-        std::cout << std::fixed << std::setw(3) << std::setprecision(5) << val
+        std::cout << std::fixed << std::setw(10) << std::setprecision(5) << val
                   << ' ';
       }
       std::cout << "\n";
@@ -70,7 +68,46 @@ public:
     }
     data[row][col] = value;
   }
+  double determinant() const {
+    size_t dim = data.size();
 
+    RecordMatrix mat(*this);
+
+    for (size_t i = 0; i < dim; ++i) {
+      size_t maxRow = i;
+      for (size_t k = i + 1; k < dim; ++k) {
+        if (std::abs(mat.getValue(k, i)) > std::abs(mat.getValue(maxRow, i))) {
+          maxRow = k;
+        }
+      }
+
+      if (i != maxRow) {
+        for (size_t j = 0; j < dim; ++j) {
+          double temp = mat.getValue(i, j);
+          mat.setValue(i, j, mat.getValue(maxRow, j));
+          mat.setValue(maxRow, j, temp);
+        }
+      }
+
+      if (mat.getValue(i, i) == 0) {
+        return 0.0;
+      }
+
+      for (size_t j = i + 1; j < dim; ++j) {
+        double coeff = -mat.getValue(j, i) / mat.getValue(i, i);
+        for (size_t k = i; k < dim; ++k) {
+          mat.setValue(j, k, mat.getValue(j, k) + coeff * mat.getValue(i, k));
+        }
+      }
+    }
+
+    double det = 1.0;
+    for (size_t i = 0; i < dim; ++i) {
+      det *= mat.getValue(i, i);
+    }
+
+    return det;
+  }
   void clear() { data.clear(); }
 };
 
@@ -83,7 +120,7 @@ public:
 
   void printVector() const {
     for (double val : data) {
-      std::cout << std::fixed << std::setw(6) << std::setprecision(5) << val
+      std::cout << std::fixed << std::setw(10) << std::setprecision(5) << val
                 << ' ';
     }
     std::cout << "\n";
