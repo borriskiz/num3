@@ -8,6 +8,7 @@ int main() {
     std::cout << "Test N: ";
     std::cin >> n;
     Tester::makeTest(n);
+    std::cout << "\n\n";
   }
 
   return 0;

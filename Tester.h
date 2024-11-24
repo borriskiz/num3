@@ -1,7 +1,7 @@
 #include "Constants.h"
+#include "Gauss.h"
 #include "Plotter.h"
 #include "RecordPoints.h"
-#include "Gauss.h"
 #include <iomanip>
 #include <iostream>
 #include <sstream>

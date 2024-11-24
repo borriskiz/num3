@@ -46,7 +46,6 @@ bool Tester::first() {
     plotter.plotPointsAndFunction(
         initialRecord, std::make_shared<RationalFunction>(gauss), -2, 2, false);
 
-    // plotter.plotDeltaPoints({initialRecord}, "1", false);
   } catch (const std::exception &e) {
     std::cerr << "Error: " << e.what() << "\n";
     return false;
