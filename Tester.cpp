@@ -114,23 +114,28 @@ bool Tester::fourth() {
 
     size_t dimension = 10;
 
-    RecordMatrix matrix(dimension, dimension + 1, 0);
+    RecordMatrix matrix(dimension, dimension, 0);
 
     matrix.data.resize(dimension);
+
     for (int i = 0; i < dimension; ++i) {
       matrix.data[i].resize(dimension + 1);
 
-      double sum = 0;
       for (int j = 0; j < dimension; ++j) {
-        if (std::abs(i - j) <= 2 && i != j) {
+        if (std::abs(i - j) == 0) {
+          double value = RandomDouble(50, 90);
+          matrix.setValue(i, j, value);
+        } else if (std::abs(i - j) == 1) {
+          double value = RandomDouble(20, 50);
+          matrix.setValue(i, j, value);
+        } else if (std::abs(i - j) == 2) {
+
           double value = RandomDouble(5, 10);
           matrix.setValue(i, j, value);
-          sum += std::abs(value);
+        } else {
+          matrix.setValue(i, j, 0);
         }
       }
-
-      matrix.setValue(i, i, 4 * std::pow(-1, RandomInt(0, 1)) * sum);
-
       matrix.setValue(i, dimension, RandomDouble(-1, 1));
     }
 
