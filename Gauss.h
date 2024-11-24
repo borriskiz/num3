@@ -1,6 +1,6 @@
 #pragma once
-#include "RecordPoints.h"
 #include "IFunction.h"
+#include "RecordPoints.h"
 inline RecordVector Gauss(RecordMatrix &matrix) {
   size_t dim = matrix.data.size();
   RecordVector result(dim);
@@ -41,9 +41,9 @@ inline RecordVector Gauss(RecordMatrix &matrix) {
   result.setValue(dim - 1, matrix.getValue(dim - 1, dim) /
                                matrix.getValue(dim - 1, dim - 1));
 
-  for (int i = dim - 2; i >= 0; --i) {
+  for (int i = static_cast<int>(dim) - 2; i >= 0; --i) {
     double sum = matrix.getValue(i, dim);
-    for (size_t j = i + 1; j < dim; ++j) {
+    for (size_t j = static_cast<size_t>(i + 1); j < dim; ++j) {
       sum -= matrix.getValue(i, j) * result.getValue(j);
     }
     result.setValue(i, sum / matrix.getValue(i, i));
@@ -91,9 +91,9 @@ inline RecordVector LUDecomposition(const RecordMatrix &matrix) {
   }
 
   RecordVector result(dim);
-  for (int i = dim - 1; i >= 0; --i) {
+  for (int i = static_cast<int>(dim - 1); i >= 0; --i) {
     result.setValue(i, y.getValue(i));
-    for (size_t k = i + 1; k < dim; ++k) {
+    for (size_t k = static_cast<size_t>(i + 1); k < dim; ++k) {
       result.setValue(i, result.getValue(i) -
                              U.getValue(i, k) * result.getValue(k));
     }

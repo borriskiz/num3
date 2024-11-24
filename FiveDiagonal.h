@@ -69,10 +69,12 @@ inline RecordVector FiveDiagonalMethod(RecordMatrix &matrix) {
                                          answer.getValue(dimension - 1) +
                                      gamma.getValue(dimension - 1));
 
-  for (int i = dimension - 3; i >= 0; --i) {
-    answer.setValue(i, alpha.getValue(i + 1) * answer.getValue(i + 1) -
-                           beta.getValue(i + 1) * answer.getValue(i + 2) +
-                           gamma.getValue(i + 1));
+  for (int i = static_cast<int>(dimension) - 3; i >= 0; --i) {
+    answer.setValue(i, alpha.getValue(static_cast<size_t>(i + 1)) *
+                               answer.getValue(static_cast<size_t>(i + 1)) -
+                           beta.getValue(static_cast<size_t>(i + 1)) *
+                               answer.getValue(static_cast<size_t>(i + 2)) +
+                           gamma.getValue(static_cast<size_t>(i + 1)));
   }
 
   answer.data.pop_back();
