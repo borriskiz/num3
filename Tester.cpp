@@ -36,16 +36,17 @@ bool Tester::first() {
     matrix.printMatrix();
 
     auto gaussAnswer = Gauss(matrix);
+    std::cout << "Gauss answer:\n";
     gaussAnswer.printVector();
 
-    RationalFunctionGauss gauss("Gausian");
-    gauss.addGaussAnswer(gaussAnswer);
+    RationalFunction gauss("Gausian");
+
+    gauss.addAnswer(gaussAnswer);
 
     plotter.plotPointsAndFunction(
-        initialRecord, std::make_shared<RationalFunctionGauss>(gauss), -2, 2,
-        false);
+        initialRecord, std::make_shared<RationalFunction>(gauss), -2, 2, false);
 
-    //plotter.plotDeltaPoints({initialRecord}, "1", false);
+    // plotter.plotDeltaPoints({initialRecord}, "1", false);
   } catch (const std::exception &e) {
     std::cerr << "Error: " << e.what() << "\n";
     return false;
@@ -55,7 +56,39 @@ bool Tester::first() {
 
 bool Tester::second() {
   try {
+    Plotter plotter("2");
 
+    size_t dimension = initialRecord.getSize();
+
+    RecordMatrix matrix(dimension, dimension + 1, -1);
+
+    for (int i = 0; i < dimension; ++i) {
+      int p = 2;
+      int q = 3;
+      double x_i = initialRecord.getPoint(i).first;
+      double y_i = initialRecord.getPoint(i).second;
+      for (size_t j = 0; j < dimension; ++j) {
+        if (j <= p) {
+          matrix.setValue(i, j, std::pow(x_i, j));
+        } else {
+          matrix.setValue(i, j, -y_i * std::pow(x_i, j - p));
+        }
+      }
+      matrix.setValue(i, dimension, y_i);
+    }
+
+    matrix.printMatrix();
+
+    auto LuAnswer = LUDecomposition(matrix);
+    std::cout << "LU answer:\n";
+    LuAnswer.printVector();
+
+    RationalFunction LUrian("LU");
+    LUrian.addAnswer(LuAnswer);
+
+    plotter.plotPointsAndFunction(initialRecord,
+                                  std::make_shared<RationalFunction>(LUrian),
+                                  -2, 2, false);
   } catch (const std::exception &e) {
     std::cerr << "Error: " << e.what() << "\n";
     return false;

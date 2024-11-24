@@ -50,10 +50,62 @@ inline RecordVector Gauss(RecordMatrix &matrix) {
 
   return result;
 }
-class RationalFunctionGauss : public IFunction {
+
+inline RecordVector LUDecomposition(const RecordMatrix &matrix) {
+  size_t dim = matrix.data.size();
+  RecordMatrix L(dim, dim);
+  RecordMatrix U(dim, dim);
+
+  for (size_t i = 0; i < dim; ++i) {
+    L.setValue(i, i, 1);
+    for (size_t j = 0; j < dim; ++j) {
+      if (i <= j) {
+        U.setValue(i, j, matrix.getValue(i, j));
+        for (size_t k = 0; k < i; ++k) {
+          U.setValue(i, j,
+                     U.getValue(i, j) - L.getValue(i, k) * U.getValue(k, j));
+        }
+      } else {
+        L.setValue(i, j, matrix.getValue(i, j));
+        for (size_t k = 0; k < j; ++k) {
+          L.setValue(i, j,
+                     L.getValue(i, j) - L.getValue(i, k) * U.getValue(k, j));
+        }
+        L.setValue(i, j, L.getValue(i, j) / U.getValue(j, j));
+      }
+    }
+  }
+
+  std::cout << "L matrix:" << std::endl;
+  L.printMatrix();
+  std::cout << "U matrix:" << std::endl;
+  U.printMatrix();
+
+  RecordVector y(dim);
+  for (size_t i = 0; i < dim; ++i) {
+    y.setValue(i, matrix.getValue(i, dim));
+    for (size_t k = 0; k < i; ++k) {
+      y.setValue(i, y.getValue(i) - L.getValue(i, k) * y.getValue(k));
+    }
+  }
+
+  RecordVector result(dim);
+  for (int i = dim - 1; i >= 0; --i) {
+    result.setValue(i, y.getValue(i));
+    for (size_t k = i + 1; k < dim; ++k) {
+      result.setValue(i, result.getValue(i) -
+                             U.getValue(i, k) * result.getValue(k));
+    }
+    result.setValue(i, result.getValue(i) / U.getValue(i, i));
+  }
+
+  return result;
+}
+
+class RationalFunction : public IFunction {
 public:
-  RationalFunctionGauss(const std::string &newName) { name = newName; }
-  void addGaussAnswer(const RecordVector &answer) { vector = answer; }
+  RationalFunction(const std::string &newName) { name = newName; }
+  void addAnswer(const RecordVector &answer) { vector = answer; }
   double evaluate(double x) const override {
     return (vector.getValue(0) + vector.getValue(1) * x +
             vector.getValue(2) * pow(x, 2)) /
