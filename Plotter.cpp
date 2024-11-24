@@ -5,68 +5,6 @@ Plotter::Plotter(const std::string &name) : plotterName(name) {
   functions = std::vector<std::shared_ptr<IFunction>>();
 }
 
-void Plotter::addFunction(const std::shared_ptr<IFunction> &func,
-                          const std::string &label) {
-  functions.push_back(func);
-  labels.push_back(label);
-}
-
-void Plotter::clearFunctions() {
-  functions.clear();
-  labels.clear();
-}
-
-void Plotter::generateData(double start, double end) {
-  std::ofstream dataFile(plotterName + ".dat");
-  if (!dataFile.is_open()) {
-    throw std::runtime_error("Error creating data file!");
-  }
-
-  double step = (end - start) / (nodes - 1);
-
-  for (int i = 0; i < nodes; ++i) {
-    double x = start + i * step;
-    dataFile << x;
-
-    for (const auto &func : functions) {
-      dataFile << " " << func->evaluate(x);
-    }
-    dataFile << "\n";
-  }
-
-  dataFile.close();
-}
-
-void Plotter::plot() {
-  std::string filename = plotterName + ".gp";
-  std::ofstream gnuplotScript(filename);
-  if (!gnuplotScript.is_open()) {
-    throw std::runtime_error("Error creating gnuplot script!");
-  }
-
-  gnuplotScript << "set title '" + plotterName + "\n ";
-  gnuplotScript << "set grid\n";
-  gnuplotScript << "set xlabel 'x'\n";
-  gnuplotScript << "set ylabel 'y'\n";
-  gnuplotScript << "set format y '%.3e'\n";
-  gnuplotScript << "plot";
-
-  for (size_t i = 0; i < functions.size(); ++i) {
-    gnuplotScript << " '" + plotterName + ".dat' using 1:" << (i + 2)
-                  << " with lines title '" << labels[i] << "'";
-    if (i != functions.size() - 1) {
-      gnuplotScript << ", \\\n";
-    }
-  }
-
-  gnuplotScript << "\n";
-  gnuplotScript.close();
-
-  // Вызов gnuplot для построения графика
-  std::string command = "gnuplot -p " + plotterName + ".gp";
-  system(command.c_str());
-}
-
 void Plotter::plotDeltaPoints(const std::vector<RecordPoints> &points,
                               const std::string &name, bool toLogscale) const {
 

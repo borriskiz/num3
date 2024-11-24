@@ -100,7 +100,6 @@ public:
 
     return det;
   }
-  void clear() { data.clear(); }
 };
 
 class RecordVector {

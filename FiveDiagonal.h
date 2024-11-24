@@ -83,4 +83,3 @@ inline RecordVector FiveDiagonalMethod(RecordMatrix &matrix) {
 
   return answer;
 }
-
