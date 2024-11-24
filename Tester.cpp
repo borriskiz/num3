@@ -133,7 +133,10 @@ bool Tester::fourth() {
     }
 
     matrix.printMatrix();
-    std::cout << matrix.determinant() << "\n";
+    auto fiveDiagonalAnswer = FiveDiagonalMethod(matrix);
+    std::cout << "fiveDiagonal answer:\n";
+    fiveDiagonalAnswer.printVector();
+    checkAnswer(matrix, fiveDiagonalAnswer);
   } catch (const std::exception &e) {
     std::cerr << "Error: " << e.what() << "\n";
     return false;

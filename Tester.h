@@ -1,4 +1,5 @@
 #include "Constants.h"
+#include "FiveDiagonal.h"
 #include "Gauss.h"
 #include "Plotter.h"
 #include "RecordPoints.h"

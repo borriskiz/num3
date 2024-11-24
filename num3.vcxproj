@@ -133,6 +133,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Constants.h" />
+    <ClInclude Include="FiveDiagonal.h" />
     <ClInclude Include="Gauss.h" />
     <ClInclude Include="IFunction.h" />
     <ClInclude Include="Plotter.h" />

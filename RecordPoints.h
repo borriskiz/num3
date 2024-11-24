@@ -5,13 +5,6 @@
 #include <string>
 #include <vector>
 
-inline double RandomDouble(double min, double max) {
-  return min + (max - min) * (rand() / static_cast<double>(RAND_MAX));
-}
-
-inline int RandomInt(int min, int max) {
-  return min + rand() % (max - min + 1);
-}
 
 class RecordPoints {
 public:
