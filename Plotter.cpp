@@ -67,7 +67,7 @@ void Plotter::plot() {
   system(command.c_str());
 }
 
-void Plotter::plotDeltaPoints(const std::vector<RecordPoints> &functions,
+void Plotter::plotDeltaPoints(const std::vector<RecordPoints> &points,
                               const std::string &name, bool toLogscale) const {
 
   std::ofstream dataFile(name + ".dat");
@@ -75,11 +75,11 @@ void Plotter::plotDeltaPoints(const std::vector<RecordPoints> &functions,
     throw std::runtime_error("Error creating data file!");
   }
 
-  for (size_t i = 0; i < functions[0].getPoints().size(); i++) {
-    dataFile << functions[0].getPoints()[i].first << " ";
-    for (const auto &function : functions) {
+  for (size_t i = 0; i < points[0].getSize(); i++) {
+    dataFile << points[0].getPoint(i).first << " ";
+    for (const auto &function : points) {
       dataFile << std::setprecision(std::numeric_limits<double>::max_digits10)
-               << function.getPoints()[i].second << " ";
+               << function.getPoint(i).second << " ";
     }
     dataFile << "\n";
   }
@@ -102,10 +102,10 @@ void Plotter::plotDeltaPoints(const std::vector<RecordPoints> &functions,
   gnuplotScript << "set pointsize 1\n";
   gnuplotScript << "plot";
 
-  for (size_t i = 0; i < functions.size(); ++i) {
+  for (size_t i = 0; i < points.size(); ++i) {
     gnuplotScript << " '" + name + ".dat' using 1:" << (i + 2)
-                  << " with points title '" << functions[i].getName() << "'";
-    if (i != functions.size() - 1) {
+                  << " with points title '" << points[i].getName() << "'";
+    if (i != points.size() - 1) {
       gnuplotScript << ", \\\n";
     }
   }
@@ -117,40 +117,25 @@ void Plotter::plotDeltaPoints(const std::vector<RecordPoints> &functions,
   system(command.c_str());
 }
 
-void Plotter::plotComparison(const RecordPoints &pointsOver,
-                             const RecordPoints &pointsUnder,
-                             const IFunction &func, double start, double end,
-                             bool toLogscale) const {
-  std::ofstream dataFileOver(plotterName + "_comparison_over.dat");
+void Plotter::plotPointsAndFunction(const RecordPoints &points,
+                                    const IFunction &func, double start,
+                                    double end, bool toLogscale) const {
+  std::ofstream dataFileOver(plotterName + "_points_" + points.getName() +
+                             ".dat");
   if (!dataFileOver.is_open()) {
     throw std::runtime_error("Error creating data file!");
   }
-  for (size_t i = 0; i < pointsOver.getPoints().size(); i++) {
-    dataFileOver << pointsOver.getPoints()[i].first << " ";
+  for (size_t i = 0; i < points.getSize(); i++) {
+    dataFileOver << points.getPoint(i).first << " ";
 
     dataFileOver << std::setprecision(std::numeric_limits<double>::max_digits10)
-                 << pointsOver.getPoints()[i].second << " ";
+                 << points.getPoint(i).second << " ";
 
     dataFileOver << "\n";
   }
   dataFileOver.close();
 
-  std::ofstream dataFileUnder(plotterName + "_comparison_under.dat");
-  if (!dataFileUnder.is_open()) {
-    throw std::runtime_error("Error creating data file!");
-  }
-  for (size_t i = 0; i < pointsUnder.getPoints().size(); i++) {
-    dataFileUnder << pointsUnder.getPoints()[i].first << " ";
-
-    dataFileUnder << std::setprecision(
-                         std::numeric_limits<double>::max_digits10)
-                  << pointsUnder.getPoints()[i].second << " ";
-
-    dataFileUnder << "\n";
-  }
-  dataFileUnder.close();
-
-  std::ofstream gnuplotScript(plotterName + "_comparison.gp");
+  std::ofstream gnuplotScript(plotterName + ".gp");
   if (!gnuplotScript.is_open()) {
     throw std::runtime_error("Error creating gnuplot script!");
   }
@@ -169,12 +154,10 @@ void Plotter::plotComparison(const RecordPoints &pointsOver,
 
   gnuplotScript << " '" << plotterName
                 << "_comparison_over.dat' using 1 : 2 with points title '"
-                << pointsOver.getName() << "',\ ";
-  gnuplotScript << " '" << plotterName
-                << "_comparison_under.dat' using 1 : 2 with points title '"
-                << pointsUnder.getName() << "',\ ";
+                << points.getName() << "',\ ";
 
-  std::ofstream dataFile2(plotterName + "_comparison_function.dat");
+
+  std::ofstream dataFile2(plotterName + "_function_" + func.getName() + ".dat");
   if (!dataFile2.is_open()) {
     throw std::runtime_error("Error creating data file!");
   }
@@ -188,15 +171,13 @@ void Plotter::plotComparison(const RecordPoints &pointsOver,
     dataFile2 << "\n";
   }
 
-  gnuplotScript
-      << " '" << plotterName
-      << "_comparison_function.dat' using 1:2 with lines title 'function'";
+  gnuplotScript << " '" << plotterName << "_function_" << func.getName()
+                << ".dat' using 1:2 with lines title 'function'";
 
   gnuplotScript.close();
 
-  std::string command = "gnuplot -p " + plotterName + "_comparison.gp";
+  std::string command = "gnuplot -p " + plotterName + ".gp";
   system(command.c_str());
 }
-
 
 std::string Plotter::getLabel(size_t i) { return labels[i]; }
