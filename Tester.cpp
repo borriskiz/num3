@@ -13,7 +13,7 @@ const RecordPoints Tester::initialRecord =
 bool Tester::first() {
   try {
     Plotter plotter("1");
-    plotter.plotDeltaPoints({initialRecord}, "test", false);
+
     size_t dimension = initialRecord.getSize();
 
     RecordMatrix matrix(dimension, dimension + 1, -1);
@@ -23,7 +23,7 @@ bool Tester::first() {
       int q = 3;
       double x_i = initialRecord.getPoint(i).first;
       double y_i = initialRecord.getPoint(i).second;
-      for (int j = 0; j < dimension; ++j) {
+      for (size_t j = 0; j < dimension; ++j) {
         if (j <= p) {
           matrix.setValue(i, j, std::pow(x_i, j));
         } else {
@@ -34,6 +34,18 @@ bool Tester::first() {
     }
 
     matrix.printMatrix();
+
+    auto gaussAnswer = Gauss(matrix);
+    gaussAnswer.printVector();
+
+    RationalFunctionGauss gauss("Gausian");
+    gauss.addGaussAnswer(gaussAnswer);
+
+    plotter.plotPointsAndFunction(
+        initialRecord, std::make_shared<RationalFunctionGauss>(gauss), -2, 2,
+        false);
+
+    //plotter.plotDeltaPoints({initialRecord}, "1", false);
   } catch (const std::exception &e) {
     std::cerr << "Error: " << e.what() << "\n";
     return false;

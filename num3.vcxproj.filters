@@ -41,5 +41,8 @@
     <ClInclude Include="Plotter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Gauss.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

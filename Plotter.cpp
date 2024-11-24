@@ -118,8 +118,9 @@ void Plotter::plotDeltaPoints(const std::vector<RecordPoints> &points,
 }
 
 void Plotter::plotPointsAndFunction(const RecordPoints &points,
-                                    const IFunction &func, double start,
-                                    double end, bool toLogscale) const {
+                                    std::shared_ptr<IFunction> func,
+                                    double start, double end,
+                                    bool toLogscale) const {
   std::ofstream dataFileOver(plotterName + "_points_" + points.getName() +
                              ".dat");
   if (!dataFileOver.is_open()) {
@@ -140,14 +141,13 @@ void Plotter::plotPointsAndFunction(const RecordPoints &points,
     throw std::runtime_error("Error creating gnuplot script!");
   }
 
-  gnuplotScript << "set title 'MonteCarlo'\n";
   gnuplotScript << "set grid\n";
   if (toLogscale) {
     gnuplotScript << "set logscale y\n";
   }
 
-  gnuplotScript << "set xlabel 'n'\n";
-  gnuplotScript << "set ylabel 'delta'\n";
+  gnuplotScript << "set xlabel 'x'\n";
+  gnuplotScript << "set ylabel 'y'\n";
   gnuplotScript << "set format y '%.3e'\n";
   gnuplotScript << "set pointsize 1\n";
   gnuplotScript << "plot";
@@ -156,7 +156,8 @@ void Plotter::plotPointsAndFunction(const RecordPoints &points,
                 << ".dat' using 1 : 2 with points title '" << points.getName()
                 << "',\ ";
 
-  std::ofstream dataFile2(plotterName + "_function_" + func.getName() + ".dat");
+  std::ofstream dataFile2(plotterName + "_function_" + func->getName() +
+                          ".dat");
   if (!dataFile2.is_open()) {
     throw std::runtime_error("Error creating data file!");
   }
@@ -165,13 +166,14 @@ void Plotter::plotPointsAndFunction(const RecordPoints &points,
 
   for (int i = 0; i < nodes; ++i) {
     double x = start + i * step;
-    dataFile2 << x << " " << func.evaluate(x);
+    dataFile2 << x << " " << func->evaluate(x);
 
     dataFile2 << "\n";
   }
 
-  gnuplotScript << " '" << plotterName << "_function_" << func.getName()
-                << ".dat' using 1:2 with lines title 'function'";
+  gnuplotScript << " '" << plotterName << "_function_" << func->getName()
+                << ".dat' using 1:2 with lines title '" << func->getName()
+                << "'";
 
   gnuplotScript.close();
 
