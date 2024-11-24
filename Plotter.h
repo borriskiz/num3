@@ -24,7 +24,7 @@ public:
   void plot();
   void plotDeltaPoints(const std::vector<RecordPoints> &functions,
                        const std::string &name, bool toLogscale) const;
-  void plotPointsAndFunction(const RecordPoints &points, const IFunction &func,
+  void plotPointsAndFunction(const RecordPoints &points, std::shared_ptr<IFunction> func,
                              double start, double end, bool toLogscale) const;
 
   std::string getLabel(size_t i);

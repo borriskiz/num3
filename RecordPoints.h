@@ -57,17 +57,55 @@ public:
     std::cout << "\n";
   }
 
-  double getValue(int row, int col) const {
+  double getValue(size_t row, size_t col) const {
     if (row < 0 || row >= data.size() || col < 0 || col >= data[0].size()) {
       throw std::out_of_range("Index out of matrix");
     }
     return data[row][col];
   }
 
-  void setValue(int row, int col, double value) {
+  void setValue(size_t row, size_t col, double value) {
     if (row < 0 || row >= data.size() || col < 0 || col >= data[0].size()) {
       throw std::out_of_range("Index out of matrix");
     }
     data[row][col] = value;
   }
+
+  void clear() { data.clear(); }
+};
+
+class RecordVector {
+public:
+  std::vector<double> data;
+  RecordVector() = default;
+  RecordVector(size_t size, double initialValue = 0.0)
+      : data(size, initialValue) {}
+
+  void printVector() const {
+    for (double val : data) {
+      std::cout << std::fixed << std::setw(6) << std::setprecision(5) << val
+                << ' ';
+    }
+    std::cout << "\n";
+  }
+
+  double getValue(size_t index) const {
+    if (index < 0 || index >= data.size()) {
+      throw std::out_of_range("Index out of vector");
+    }
+    return data[index];
+  }
+
+  void setValue(size_t index, double value) {
+    if (index < 0 || index >= data.size()) {
+      throw std::out_of_range("Index out of vector");
+    }
+    data[index] = value;
+  }
+
+  size_t getSize() const { return data.size(); }
+
+  void addValue(double value) { data.push_back(value); }
+
+  void clear() { data.clear(); }
 };
