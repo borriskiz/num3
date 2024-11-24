@@ -5,12 +5,12 @@
 #include <string>
 #include <vector>
 
-int randomInt(int min, int max) {
+inline int randomInt(int min, int max) {
   int random_num = rand() % (max - min + 1) + min;
   return random_num;
 }
 
-double randomDouble(double min, double max) {
+inline double randomDouble(double min, double max) {
   double f = (double)rand() / RAND_MAX;
   return min + (double)rand() / RAND_MAX * (max - min);
 }
@@ -18,6 +18,9 @@ double randomDouble(double min, double max) {
 class RecordPoints {
 public:
   RecordPoints(const std::string &name) : name(name) {}
+  RecordPoints(const std::string &name,
+               const std::vector<std::pair<double, double>> &points)
+      : name(name), points(points) {}
 
   void addPoint(double x, double y) { points.emplace_back(x, y); }
   void clearPoints() { points.clear(); }
@@ -54,14 +57,14 @@ public:
 
   double get(int row, int col) const {
     if (row < 0 || row >= data.size() || col < 0 || col >= data[0].size()) {
-      throw std::out_of_range("Индекс за пределами матрицы");
+      throw std::out_of_range("Index out of matrix");
     }
     return data[row][col];
   }
 
   void set(int row, int col, double value) {
     if (row < 0 || row >= data.size() || col < 0 || col >= data[0].size()) {
-      throw std::out_of_range("Индекс за пределами матрицы");
+      throw std::out_of_range("Index out of matrix");
     }
     data[row][col] = value;
   }

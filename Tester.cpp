@@ -1,9 +1,21 @@
 #include "Tester.h"
 
+const RecordPoints Tester::initialRecord =
+    RecordPoints("Initial Points", {
+                                       {-2, 0.28205},
+                                       {-1.20, 1.0452},
+                                       {-0.400, 2.5052},
+                                       {0.400, 1.1723},
+                                       {1.20, -0.20842},
+                                       {2., -0.28661},
+                                   });
+
 bool Tester::first() {
   try {
-    
-  } catch (const std::exception &) {
+    Plotter plotter("1");
+    plotter.plotDeltaPoints({initialRecord}, "test",false);
+  } catch (const std::exception &e) {
+    std::cerr << "Error: " << e.what() << "\n";
     return false;
   }
   return true;
@@ -11,8 +23,9 @@ bool Tester::first() {
 
 bool Tester::second() {
   try {
-    
-  } catch (const std::exception &) {
+
+  } catch (const std::exception &e) {
+    std::cerr << "Error: " << e.what() << "\n";
     return false;
   }
   return true;
@@ -20,7 +33,6 @@ bool Tester::second() {
 
 bool Tester::third() {
   try {
-    
 
   } catch (const std::exception &e) {
     std::cerr << "Error: " << e.what() << "\n";
@@ -31,8 +43,9 @@ bool Tester::third() {
 
 bool Tester::fourth() {
   try {
-    
-  } catch (const std::exception &) {
+
+  } catch (const std::exception &e) {
+    std::cerr << "Error: " << e.what() << "\n";
     return false;
   }
   return true;
